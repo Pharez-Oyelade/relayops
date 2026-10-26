@@ -8,6 +8,8 @@ import { env } from "./config/env.js";
 import authRoutes from "./modules/auth/auth.routes.js";
 import tenantRoutes from "./modules/tenant/tenant.routes.js";
 import leadRoutes from "./modules/lead/lead.routes.js";
+import projectRoutes from "./modules/project/project.routes.js";
+import deliverableRoutes from "./modules/deliverable/deliverable.routes.js";
 import auditRoutes from "./modules/audit/audit.routes.js";
 import { errorHandler } from "./middleware/error.middleware.js";
 
@@ -31,6 +33,8 @@ app.use(hpp());
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/tenants", tenantRoutes);
 app.use("/api/v1/leads", leadRoutes);
+app.use("/api/v1/projects", projectRoutes);
+app.use("/api/v1/deliverables", deliverableRoutes);
 app.use("/api/v1/audit-logs", auditRoutes);
 
 // Centralized Error Handling Middleware
