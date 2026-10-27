@@ -127,4 +127,68 @@ export class EmailService {
       }
     }
   }
+
+  static async sendPaymentReceipt(params: {
+    to: string;
+    workspaceName: string;
+    clientName: string;
+    invoiceNumber: string;
+    amount: number; // minor currency units
+    currency: string;
+    paymentReference: string;
+  }): Promise<void> {
+    const formattedAmount = (params.amount / 100).toLocaleString("en-US", {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    });
+    const subject = `Payment Receipt for Invoice ${params.invoiceNumber} (${params.currency} ${formattedAmount})`;
+
+    const html = `
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <meta charset="utf-8">
+          <style>
+            body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color: #0f172a; color: #f8fafc; padding: 40px 20px; }
+            .container { max-width: 560px; margin: 0 auto; background-color: #1e293b; border-radius: 12px; border: 1px solid #334155; padding: 32px; }
+            .logo { font-size: 20px; font-weight: 700; color: #6366f1; margin-bottom: 24px; letter-spacing: -0.5px; }
+            h1 { font-size: 22px; color: #10b981; margin-top: 0; }
+            p { font-size: 15px; line-height: 1.6; color: #94a3b8; }
+            .receipt-box { background-color: #0f172a; border: 1px solid #334155; border-radius: 8px; padding: 16px; margin: 20px 0; }
+            .receipt-row { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 14px; }
+            .amount { font-size: 24px; font-weight: 700; color: #10b981; text-align: center; margin: 12px 0; }
+            .footer { font-size: 12px; color: #64748b; margin-top: 32px; border-top: 1px solid #334155; padding-top: 16px; }
+          </style>
+        </head>
+        <body>
+          <div class="container">
+            <div class="logo">RelayOps</div>
+            <h1>Payment Confirmed</h1>
+            <p>Dear ${params.clientName},</p>
+            <p>Thank you for your payment. This email serves as your official payment receipt for invoice <strong>${params.invoiceNumber}</strong> issued by <strong>${params.workspaceName}</strong>.</p>
+            <div class="receipt-box">
+              <div class="amount">${params.currency} ${formattedAmount}</div>
+              <p style="margin: 0; font-size: 13px; color: #94a3b8; text-align: center;">Status: <strong>PAID</strong></p>
+              <p style="margin: 4px 0 0; font-size: 12px; color: #64748b; text-align: center; word-break: break-all;">Paystack Reference: ${params.paymentReference}</p>
+            </div>
+            <p class="footer">RelayOps Billing • If you have questions regarding this receipt, please contact your workspace administrator.</p>
+          </div>
+        </body>
+      </html>
+    `;
+
+    try {
+      await resend.emails.send({
+        from: env.EMAIL_FROM,
+        to: params.to,
+        subject,
+        html,
+      });
+    } catch (error) {
+      console.error("[EmailService] Failed to send payment receipt:", error);
+      if (env.NODE_ENV === "production") {
+        throw error;
+      }
+    }
+  }
 }

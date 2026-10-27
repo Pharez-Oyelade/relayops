@@ -3,6 +3,8 @@ import crypto from "crypto";
 import { Response } from "express";
 import { env } from "../config/env.js";
 
+export const REFRESH_COOKIE_NAME = "relayops_rt";
+
 export interface AccessTokenPayload {
   sub: string;
   email: string;
@@ -13,8 +15,6 @@ export interface RefreshTokenPayload {
   familyId: string;
   jti: string; // unique identifier for the token
 }
-
-export const REFRESH_COOKIE_NAME = "relayops_rt";
 
 export const signAccessToken = (payload: AccessTokenPayload): string => {
   return jwt.sign(payload, env.JWT_ACCESS_SECRET, {
@@ -65,5 +65,12 @@ export const clearRefreshTokenCookie = (res: Response): void => {
     secure: isProd,
     sameSite: isProd ? "none" : "lax",
     path: "/api/v1/auth",
+  });
+
+  res.clearCookie(REFRESH_COOKIE_NAME, {
+    httpOnly: true,
+    secure: isProd,
+    sameSite: isProd ? "none" : "lax",
+    path: "/",
   });
 };

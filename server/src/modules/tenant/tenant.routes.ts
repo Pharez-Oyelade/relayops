@@ -18,6 +18,7 @@ const router = Router();
 // Global user routes (authenticated, not scoped to a specific tenant)
 router.use(authenticate);
 
+router.get("/me", TenantController.getMyWorkspaces);
 router.get("/my-workspaces", TenantController.getMyWorkspaces);
 router.post(
   "/",

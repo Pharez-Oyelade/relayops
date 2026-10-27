@@ -14,6 +14,7 @@ declare global {
         role: Role;
         plan: TenantPlan;
       };
+      rawBody?: Buffer;
     }
   }
 }

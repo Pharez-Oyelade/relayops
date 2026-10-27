@@ -12,12 +12,17 @@ export const errorHandler = (
 ): void => {
   // Handle Zod validation errors
   if (err instanceof ZodError) {
+    const fieldErrors = err.flatten().fieldErrors;
+    const firstErrorMessage = Object.values(fieldErrors).flat()[0] as string | undefined;
+    const message = firstErrorMessage || "Invalid request data";
+
     res.status(400).json({
       success: false,
+      message,
       error: {
         code: "VALIDATION_ERROR",
-        message: "Invalid request data",
-        details: err.flatten().fieldErrors,
+        message,
+        details: fieldErrors,
       },
     });
     return;
@@ -27,6 +32,7 @@ export const errorHandler = (
   if (err instanceof AppError) {
     res.status(err.statusCode).json({
       success: false,
+      message: err.message,
       error: {
         code: err.code,
         message: err.message,
@@ -39,6 +45,7 @@ export const errorHandler = (
   if ("code" in err && (err as { code: number }).code === 11000) {
     res.status(409).json({
       success: false,
+      message: "Resource already exists",
       error: {
         code: "DUPLICATE_RESOURCE",
         message: "Resource already exists",
@@ -51,6 +58,7 @@ export const errorHandler = (
   if (err instanceof mongoose.Error.CastError) {
     res.status(400).json({
       success: false,
+      message: `Invalid ${err.path}: ${err.value}`,
       error: {
         code: "INVALID_ID",
         message: `Invalid ${err.path}: ${err.value}`,
@@ -61,14 +69,17 @@ export const errorHandler = (
 
   // Fallback for unhandled errors
   console.error("Unhandled error:", err);
+  const fallbackMessage =
+    env.NODE_ENV === "production"
+      ? "An unexpected error occurred"
+      : err.message;
+
   res.status(500).json({
     success: false,
+    message: fallbackMessage,
     error: {
       code: "INTERNAL_SERVER_ERROR",
-      message:
-        env.NODE_ENV === "production"
-          ? "An unexpected error occurred"
-          : err.message,
+      message: fallbackMessage,
     },
   });
 };

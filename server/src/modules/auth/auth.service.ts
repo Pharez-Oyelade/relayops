@@ -82,9 +82,18 @@ export class AuthService {
 
   /* Atomic Registration: Create User, tenant and owner membership in one transaction */
   static async register(input: RegisterInput, meta: RequestMeta) {
+    const derivedSlug = (
+      input.workspaceSlug ||
+      input.workspaceName
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/^-|-$/g, "")
+    );
+    const workspaceSlug = derivedSlug.length >= 3 ? derivedSlug : `${derivedSlug || "agency"}-os`;
+
     const [existingEmail, existingSlug] = await Promise.all([
       UserModel.exists({ email: input.email }),
-      TenantModel.exists({ slug: input.workspaceSlug }),
+      TenantModel.exists({ slug: workspaceSlug }),
     ]);
 
     if (existingEmail) {
@@ -110,11 +119,11 @@ export class AuthService {
         [
           {
             name: input.workspaceName,
-            slug: input.workspaceSlug,
+            slug: workspaceSlug,
             plan: "FREE",
             settings: {
-              currency: input.currency,
-              invoicePrefix: input.workspaceSlug.slice(0, 3).toUpperCase(),
+              currency: input.currency || "USD",
+              invoicePrefix: workspaceSlug.slice(0, 3).toUpperCase(),
               maxProjects: 3,
             },
           },

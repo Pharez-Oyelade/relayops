@@ -75,9 +75,11 @@ export class AuthController {
     const rawRefreshToken = req.cookies?.[REFRESH_COOKIE_NAME];
 
     await AuthService.logout(rawRefreshToken);
+    clearRefreshTokenCookie(res);
 
     res.status(200).json({
       success: true,
+      message: "Logged out successfully",
       data: {
         message: "Logged out successfully",
       },

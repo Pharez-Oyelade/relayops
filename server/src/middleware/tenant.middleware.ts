@@ -107,6 +107,7 @@ export const tenantApiRateLimiter = rateLimit({
     const userId = req.user?.id ?? req.ip ?? "anon-user";
     return `${tenantId}:${userId}`;
   },
+  validate: { keyGeneratorIpFallback: false },
   standardHeaders: true,
   legacyHeaders: false,
 });

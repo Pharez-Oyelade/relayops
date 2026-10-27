@@ -28,6 +28,12 @@ const envSchema = z.object({
   CLOUDINARY_API_SECRET: z
     .string()
     .min(1, "CLOUDINARY_API_SECRET is required"),
+  PAYSTACK_SECRET_KEY: z
+    .string()
+    .min(1, "PAYSTACK_SECRET_KEY is required"),
+  PAYSTACK_PUBLIC_KEY: z
+    .string()
+    .min(1, "PAYSTACK_PUBLIC_KEY is required"),
 });
 
 const _env = envSchema.safeParse(process.env);

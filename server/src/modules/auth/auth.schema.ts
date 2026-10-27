@@ -9,15 +9,15 @@ export const registerSchema = z.object({
       .trim()
       .min(2, "Name must be at least 2 characters")
       .max(100),
-    email: z.email("Invalid email address").trim().toLowerCase(),
+    email: z.string().email("Invalid email address").trim().toLowerCase(),
     password: z
       .string()
-      .min(8, "Password must be ar least 8 characters")
+      .min(8, "Password must be at least 8 characters")
       .max(72, "Password cannot exceed 72 characters"),
     workspaceName: z
       .string()
       .trim()
-      .min(2, "workspace name must be at least 2 characters")
+      .min(2, "Workspace name must be at least 2 characters")
       .max(100),
     workspaceSlug: z
       .string()
@@ -28,7 +28,8 @@ export const registerSchema = z.object({
       .regex(
         /^[a-z0-9-]+$/,
         "Slug can only contain lowercase letters, numbers, and hyphens",
-      ),
+      )
+      .optional(),
     currency: z.enum(CURRENCIES).optional().default("USD"),
   }),
   query: z.object({}).optional(),
@@ -37,7 +38,7 @@ export const registerSchema = z.object({
 
 export const loginSchema = z.object({
   body: z.object({
-    email: z.email("Invalid email address").trim().toLowerCase(),
+    email: z.string().email("Invalid email address").trim().toLowerCase(),
     password: z.string().min(1, "Password is required"),
   }),
   query: z.object({}).optional(),
