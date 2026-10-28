@@ -54,7 +54,7 @@ export default function PublicInquirePage({ params }: InquirePageProps) {
   };
 
   return (
-    <div className="min-h-screen bg-background text-foreground flex flex-col justify-center items-center p-6 select-none">
+    <div className="min-h-screen bg-background text-foreground flex flex-col justify-center items-center p-6">
       <div className="w-full max-w-lg space-y-6">
         <div className="text-center space-y-2">
           <div className="inline-flex items-center gap-2 mb-2">
