@@ -38,14 +38,14 @@ export default function PublicLandingPage() {
               href="/login"
               className="inline-flex h-9 items-center justify-center rounded-lg border border-border bg-card px-4 text-xs font-semibold text-foreground hover:bg-muted transition-all duration-150 active:scale-[0.98]"
             >
-              Login / Client Portal
+              Login <span className="hidden sm:inline">/ Client Portal</span>
             </Link>
             <Link
               href={isAuthenticated ? "/dashboard" : "/register"}
               className="inline-flex h-9 items-center justify-center rounded-lg bg-primary px-4 text-xs font-semibold text-primary-foreground hover:bg-primary/90 transition-all duration-150 active:scale-[0.98]"
             >
               {isAuthenticated ? "Enter Workspace" : "Get Started"}
-              <ArrowRight className="ml-1.5 h-3.5 w-4 stroke-2" />
+              <ArrowRight className="ml-1.5 h-3.5 w-4 stroke-2 hidden sm:inline" />
             </Link>
           </div>
         </div>
