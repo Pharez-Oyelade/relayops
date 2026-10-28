@@ -24,14 +24,14 @@
     --radius: 0.5rem;
   }
 
-  .dark {
-    --background: 240 10% 3.9%; /* #09090b deep matte zinc */
+  /* .dark {
+    --background: 240 10% 3.9%;
     --foreground: 0 0% 98%;
-    --card: 240 8% 7%; /* #121215 */
+    --card: 240 8% 7%;
     --card-foreground: 0 0% 98%;
     --popover: 240 8% 7%;
     --popover-foreground: 0 0% 98%;
-    --primary: 238.7 83.5% 66.7%; /* Electric Violet/Indigo #6366f1 */
+    --primary: 238.7 83.5% 66.7%;
     --primary-foreground: 240 10% 3.9%;
     --secondary: 240 3.7% 15.9%;
     --secondary-foreground: 0 0% 98%;
@@ -41,10 +41,10 @@
     --accent-foreground: 0 0% 98%;
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 0 0% 98%;
-    --border: 240 3.7% 15.9%; /* zinc-800 #27272a */
+    --border: 240 3.7% 15.9%;
     --input: 240 3.7% 15.9%;
     --ring: 238.7 83.5% 66.7%;
-  }
+  } */
 
   * {
     border-color: hsl(var(--border));
